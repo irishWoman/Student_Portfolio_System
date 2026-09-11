@@ -8,7 +8,7 @@
     their portfolio.
 --}}
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +20,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="h-full flex flex-col"
+<body class="min-h-screen flex flex-col"
       x-data="{ sidebarOpen: JSON.parse(localStorage.getItem('portfolio-sidebar-open') ?? 'true') }"
       x-init="$watch('sidebarOpen', value => localStorage.setItem('portfolio-sidebar-open', JSON.stringify(value)))">
 
@@ -72,7 +72,7 @@
     <div class="h-1 bg-amber-500"></div>
 </header>
 
-<div class="flex flex-1 min-h-0">
+<div class="flex flex-1">
     @auth
         <aside x-show="sidebarOpen" x-cloak
                class="w-56 shrink-0 bg-navy-900 text-white/80 hidden md:flex md:flex-col md:justify-between">
@@ -87,7 +87,7 @@
         </aside>
     @endauth
 
-    <main class="flex-1 min-w-0 p-4 sm:p-6 max-w-[1400px]">
+    <main class="flex-1 min-w-0 p-4 sm:p-6 max-w-[1400px] mx-auto">
         @include('partials.flash')
         @yield('content')
     </main>
