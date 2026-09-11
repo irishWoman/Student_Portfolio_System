@@ -2,7 +2,13 @@
 @section('title', $definition['title'])
 
 @section('content')
-    <a href="{{ route('portfolio.index') }}" class="text-sm text-navy-700 underline underline-offset-2">Back to portfolio</a>
+    <a href="{{ route('portfolio.index') }}" title="Back to portfolio" aria-label="Back to portfolio"
+       class="inline-flex items-center gap-1.5 text-sm text-navy-700 hover:text-navy-800">
+        <svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 15l-5-5 5-5"/>
+        </svg>
+        Back to portfolio
+    </a>
 
     <div class="card mt-3 mb-5">
         <div class="h-1 bg-amber-500"></div>

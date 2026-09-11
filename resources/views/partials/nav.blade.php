@@ -7,7 +7,7 @@
 
 <nav class="py-4">
     @if ($user->hasRole('student'))
-        <p class="px-4 pb-2 text-[11px] uppercase tracking-wider text-white/40">My portfolio</p>
+        <p class="px-4 pb-2 text-xs uppercase tracking-wider text-white/40">My portfolio</p>
         <a href="{{ route('portfolio.index') }}" class="{{ $link }} {{ request()->routeIs('portfolio.*') ? $active : '' }}">
             This academic year
         </a>
@@ -18,14 +18,14 @@
     @endif
 
     @if ($user->hasAnyRole(['faculty', 'chair', 'admin']))
-        <p class="px-4 pt-4 pb-2 text-[11px] uppercase tracking-wider text-white/40">Evaluation</p>
+        <p class="px-4 pt-4 pb-2 text-xs uppercase tracking-wider text-white/40">Evaluation</p>
         <a href="{{ route('faculty.queue') }}" class="{{ $link }} {{ request()->routeIs('faculty.*') ? $active : '' }}">
             Review queue
         </a>
     @endif
 
     @if ($user->hasAnyRole(['chair', 'admin']))
-        <p class="px-4 pt-4 pb-2 text-[11px] uppercase tracking-wider text-white/40">Program</p>
+        <p class="px-4 pt-4 pb-2 text-xs uppercase tracking-wider text-white/40">Program</p>
         <a href="{{ route('chair.dashboard') }}" class="{{ $link }} {{ request()->routeIs('chair.dashboard') ? $active : '' }}">
             PLO attainment
         </a>

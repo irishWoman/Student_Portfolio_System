@@ -61,7 +61,14 @@ class PortfolioController extends Controller
             'number' => $number,
             'definition' => $definition,
             'deadline' => $this->deadlines->forSection($portfolio->student, $number),
-            'canEdit' => $request->user()->can('update', $portfolio)
+            // A section is editable on its own terms: the student owns the
+            // portfolio (checked above), this specific entry hasn't itself
+            // been submitted or validated, and no locking deadline has
+            // passed. The portfolio's overall status does not gate this —
+            // one section going to review does not freeze the others.
+            'canEdit' => $request->user()->isRole(\App\Support\Enums\Role::Student)
+                && $request->user()->student?->id === $portfolio->student_id
+                && $entry->status->isEditableByStudent()
                 && $this->deadlines->canEditSection($portfolio->student, $number),
         ]);
     }

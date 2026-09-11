@@ -49,7 +49,7 @@ export default {
                 },
             },
             fontFamily: {
-                sans: ['Source Sans 3', ...defaultTheme.fontFamily.sans],
+                sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
                 mono: ['JetBrains Mono', ...defaultTheme.fontFamily.mono],
             },
         },

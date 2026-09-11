@@ -21,6 +21,12 @@
     :focus-visible {
         @apply outline-2 outline-offset-2 outline-amber-500;
     }
+
+    /* Alpine hides x-cloak'd elements only once it boots; without this rule
+       the sidebar flashes open for a moment on every page load. */
+    [x-cloak] {
+        display: none !important;
+    }
 }
 
 @layer components {

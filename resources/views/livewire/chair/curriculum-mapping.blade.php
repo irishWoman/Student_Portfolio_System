@@ -16,7 +16,7 @@
                     <p class="text-xs font-semibold {{ $row['courses'] === 0 ? 'text-status-risk' : 'text-navy-800' }}">
                         PLO {{ $number }}
                     </p>
-                    <p class="text-[11px] text-slate-500 leading-tight">{{ \Illuminate\Support\Str::limit($row['plo']->title, 28) }}</p>
+                    <p class="text-xs text-slate-500 leading-tight">{{ \Illuminate\Support\Str::limit($row['plo']->title, 28) }}</p>
                     <p class="text-xs mt-1">
                         {{ $row['courses'] }} course{{ $row['courses'] === 1 ? '' : 's' }}
                         @if ($row['highest'])
@@ -64,7 +64,7 @@
                             class="w-full text-left px-4 py-3 hover:bg-cream-50 transition {{ $courseId === $item->id ? 'bg-navy-100 border-l-2 border-amber-500' : '' }}">
                         <p class="text-sm font-medium text-slate-800">{{ $item->code }}</p>
                         <p class="text-xs text-slate-500">{{ $item->title }}</p>
-                        <p class="text-[11px] mt-1 {{ $item->learning_outcomes_count ? 'text-slate-500' : 'text-status-risk' }}">
+                        <p class="text-xs mt-1 {{ $item->learning_outcomes_count ? 'text-slate-500' : 'text-status-risk' }}">
                             Year {{ $item->year_level }} ·
                             {{ $item->learning_outcomes_count }} CLO{{ $item->learning_outcomes_count === 1 ? '' : 's' }}
                         </p>
