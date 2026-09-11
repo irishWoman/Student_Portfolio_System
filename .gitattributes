@@ -1,0 +1,5 @@
+* text=auto eol=lf
+
+*.blade.php linguist-language=Blade
+/.github export-ignore
+/tests export-ignore

@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Shared component classes.
+ * The look follows the university's existing records portal: navy chrome, a
+ * gold rule, cream data rows. Everything here is a repeated pattern; one-off
+ * styling stays in the Blade file that needs it.
+ */
+
+@layer base {
+    /* System font stack with a serif fallback avoided on purpose: this is a
+       records system, and the portal it sits beside is sans-serif. */
+    body {
+        @apply bg-slate-100 text-slate-800 antialiased;
+    }
+
+    /* Keyboard focus must stay visible: portfolio forms are long and many
+       students tab through them. */
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-amber-500;
+    }
+}
+
+@layer components {
+    .card {
+        @apply bg-white border border-slate-200 shadow-sm;
+    }
+
+    .card-header {
+        @apply bg-navy-800 text-white px-4 py-2.5 text-sm font-semibold tracking-wide;
+    }
+
+    .band {
+        @apply bg-navy-100 text-navy-800 px-4 py-2 text-xs font-semibold uppercase tracking-wider;
+    }
+
+    /* Data tables: cream banding, like the portal's grade sheets. */
+    .data-table {
+        @apply w-full text-sm border-collapse;
+    }
+
+    .data-table thead th {
+        @apply bg-navy-800 text-white text-left font-semibold px-3 py-2 text-xs;
+    }
+
+    .data-table tbody td {
+        @apply px-3 py-2 border-b border-cream-200 align-top;
+    }
+
+    .data-table tbody tr:nth-child(odd) {
+        @apply bg-cream-100;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+        @apply bg-cream-50;
+    }
+
+    .btn {
+        @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition
+               focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply btn bg-navy-800 text-white hover:bg-navy-700;
+    }
+
+    .btn-accent {
+        @apply btn bg-amber-500 text-navy-900 font-semibold hover:bg-amber-600 hover:text-white;
+    }
+
+    .btn-quiet {
+        @apply btn bg-white border border-slate-300 text-slate-700 hover:bg-slate-50;
+    }
+
+    .btn-danger {
+        @apply btn bg-white border border-red-300 text-status-risk hover:bg-red-50;
+    }
+
+    .field-label {
+        @apply block text-sm font-medium text-slate-700 mb-1;
+    }
+
+    .field-help {
+        @apply text-xs text-slate-500 mt-1;
+    }
+
+    .input,
+    .textarea,
+    .select {
+        @apply w-full border-slate-300 text-sm shadow-sm
+               focus:border-navy-600 focus:ring-navy-600;
+    }
+
+    .pill {
+        @apply inline-flex items-center px-2 py-0.5 text-xs font-medium ring-1 ring-inset;
+    }
+
+    .section-tile {
+        @apply card flex flex-col hover:border-navy-600 transition;
+    }
+
+    .meter {
+        @apply h-1.5 w-full bg-slate-200 overflow-hidden;
+    }
+
+    .meter-fill {
+        @apply h-full bg-status-ontrack;
+    }
+}
