@@ -4,45 +4,46 @@
         <div class="card-header">Placement</div>
         <div class="p-5 grid gap-4 sm:grid-cols-2">
             <div>
-                <label class="field-label">Company</label>
-                <input type="text" wire:model="form.company_name" @disabled(! $canEdit) class="input">
+                <label for="ojt-company" class="field-label">Company <span class="text-status-risk">*</span></label>
+                <input id="ojt-company" type="text" wire:model="form.company_name" @disabled(! $canEdit) class="input">
                 @error('form.company_name') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="field-label">Industry</label>
-                <input type="text" wire:model="form.industry" @disabled(! $canEdit) class="input">
+                <label for="ojt-industry" class="field-label">Industry</label>
+                <input id="ojt-industry" type="text" wire:model="form.industry" @disabled(! $canEdit) class="input">
             </div>
             <div class="sm:col-span-2">
-                <label class="field-label">Address</label>
-                <input type="text" wire:model="form.company_address" @disabled(! $canEdit) class="input">
+                <label for="ojt-address" class="field-label">Address</label>
+                <input id="ojt-address" type="text" wire:model="form.company_address" @disabled(! $canEdit) class="input">
             </div>
             <div>
-                <label class="field-label">Supervisor</label>
-                <input type="text" wire:model="form.supervisor_name" @disabled(! $canEdit) class="input">
+                <label for="ojt-supervisor" class="field-label">Supervisor <span class="text-status-risk">*</span></label>
+                <input id="ojt-supervisor" type="text" wire:model="form.supervisor_name" @disabled(! $canEdit) class="input">
                 @error('form.supervisor_name') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="field-label">Supervisor position</label>
-                <input type="text" wire:model="form.supervisor_position" @disabled(! $canEdit) class="input">
+                <label for="ojt-supervisor-position" class="field-label">Supervisor position</label>
+                <input id="ojt-supervisor-position" type="text" wire:model="form.supervisor_position" @disabled(! $canEdit) class="input">
             </div>
             <div>
-                <label class="field-label">Supervisor email</label>
-                <input type="email" wire:model="form.supervisor_email" @disabled(! $canEdit) class="input">
+                <label for="ojt-supervisor-email" class="field-label">Supervisor email <span class="text-status-risk">*</span></label>
+                <input id="ojt-supervisor-email" type="email" wire:model="form.supervisor_email" @disabled(! $canEdit) class="input">
                 @error('form.supervisor_email') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="flex gap-3">
                 <div class="flex-1">
-                    <label class="field-label">Started</label>
-                    <input type="date" wire:model="form.started_on" @disabled(! $canEdit) class="input">
+                    <label for="ojt-started" class="field-label">Started</label>
+                    <input id="ojt-started" type="date" wire:model="form.started_on" @disabled(! $canEdit) class="input">
                 </div>
                 <div class="flex-1">
-                    <label class="field-label">Ended</label>
-                    <input type="date" wire:model="form.ended_on" @disabled(! $canEdit) class="input">
+                    <label for="ojt-ended" class="field-label">Ended</label>
+                    <input id="ojt-ended" type="date" wire:model="form.ended_on" @disabled(! $canEdit) class="input">
                 </div>
             </div>
             <div>
-                <label class="field-label">Hours completed (of 240)</label>
-                <input type="number" wire:model="form.completed_hours" @disabled(! $canEdit) class="input">
+                <label for="ojt-hours" class="field-label">Hours completed (of 240) <span class="text-status-risk">*</span></label>
+                <input id="ojt-hours" type="number" wire:model="form.completed_hours" @disabled(! $canEdit) class="input">
+                @error('form.completed_hours') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
                 @if ($record)
                     <div class="meter mt-2"><div class="meter-fill" style="width: {{ $record->hoursProgress() }}%"></div></div>
                 @endif
@@ -54,21 +55,21 @@
         <div class="card-header">Your work</div>
         <div class="p-5 space-y-4">
             <div>
-                <label class="field-label">Objectives you set</label>
-                <textarea wire:model="form.objectives" rows="2" @disabled(! $canEdit) class="textarea"></textarea>
+                <label for="ojt-objectives" class="field-label">Objectives you set</label>
+                <textarea id="ojt-objectives" wire:model="form.objectives" rows="2" @disabled(! $canEdit) class="textarea"></textarea>
             </div>
             <div>
-                <label class="field-label">Assigned responsibilities</label>
-                <textarea wire:model="form.responsibilities" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
+                <label for="ojt-responsibilities" class="field-label">Assigned responsibilities <span class="text-status-risk">*</span></label>
+                <textarea id="ojt-responsibilities" wire:model="form.responsibilities" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
                 @error('form.responsibilities') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="field-label">Work outputs</label>
-                <textarea wire:model="form.work_outputs" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
+                <label for="ojt-outputs" class="field-label">Work outputs</label>
+                <textarea id="ojt-outputs" wire:model="form.work_outputs" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
             </div>
             <div>
-                <label class="field-label">Your reflection on the immersion</label>
-                <textarea wire:model="form.student_reflection" rows="4" @disabled(! $canEdit) class="textarea"></textarea>
+                <label for="ojt-reflection" class="field-label">Your reflection on the immersion</label>
+                <textarea id="ojt-reflection" wire:model="form.student_reflection" rows="4" @disabled(! $canEdit) class="textarea"></textarea>
             </div>
         </div>
         @if ($canEdit)

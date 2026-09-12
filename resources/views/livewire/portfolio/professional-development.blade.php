@@ -4,16 +4,16 @@
         <div class="card-header">{{ $editingId ? 'Edit activity' : 'Add activity' }}</div>
         <div class="p-5 grid gap-4 sm:grid-cols-2">
             <div>
-                <label class="field-label">Type</label>
-                <select wire:model="kind" @disabled(! $canEdit) class="select">
+                <label for="pd-kind" class="field-label">Type <span class="text-status-risk">*</span></label>
+                <select id="pd-kind" wire:model="kind" @disabled(! $canEdit) class="select">
                     @foreach (['seminar', 'workshop', 'conference', 'certification', 'competition', 'hackathon', 'webinar', 'industry_training', 'leadership', 'publication', 'other'] as $option)
                         <option value="{{ $option }}">{{ str($option)->replace('_', ' ')->title() }}</option>
                     @endforeach
                 </select>
             </div>
             <div>
-                <label class="field-label">Title</label>
-                <input type="text" wire:model="title" @disabled(! $canEdit) class="input">
+                <label for="pd-title" class="field-label">Title <span class="text-status-risk">*</span></label>
+                <input id="pd-title" type="text" wire:model="title" @disabled(! $canEdit) class="input">
                 @error('title') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
@@ -31,8 +31,8 @@
                 </div>
             </div>
             <div class="sm:col-span-2">
-                <label class="field-label">What can you now do that you could not before?</label>
-                <textarea wire:model="competencyDemonstrated" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
+                <label for="pd-competency" class="field-label">What can you now do that you could not before? <span class="text-status-risk">*</span></label>
+                <textarea id="pd-competency" wire:model="competencyDemonstrated" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
                 <p class="field-help">Attendance alone earns no attainment. Describe the competency and where you applied it.</p>
                 @error('competencyDemonstrated') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>

@@ -7,8 +7,8 @@
         </div>
         <div class="p-5 grid gap-4 sm:grid-cols-2">
             <div class="sm:col-span-2">
-                <label class="field-label">Project title</label>
-                <input type="text" wire:model="title" @disabled(! $canEdit) class="input">
+                <label for="dp-title" class="field-label">Project title <span class="text-status-risk">*</span></label>
+                <input id="dp-title" type="text" wire:model="title" @disabled(! $canEdit) class="input">
                 @error('title') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
             <div>

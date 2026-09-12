@@ -34,14 +34,14 @@
         <div class="p-5 space-y-5">
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <label class="field-label">What are you reflecting on?</label>
-                    <input type="text" wire:model="subject" @disabled(! $canEdit) class="input"
+                    <label for="refl-subject" class="field-label">What are you reflecting on? <span class="text-status-risk">*</span></label>
+                    <input id="refl-subject" type="text" wire:model="subject" @disabled(! $canEdit) class="input"
                            placeholder="Project or activity name">
                     @error('subject') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="field-label">Linked project</label>
-                    <select wire:model="projectId" @disabled(! $canEdit) class="select">
+                    <label for="refl-project" class="field-label">Linked project</label>
+                    <select id="refl-project" wire:model="projectId" @disabled(! $canEdit) class="select">
                         <option value="">Not linked</option>
                         @foreach ($projects as $project)
                             <option value="{{ $project->id }}">{{ $project->title }}</option>
@@ -53,8 +53,13 @@
             @php $n = 1; @endphp
             @foreach ($prompts as $key => $prompt)
                 <div>
-                    <label class="field-label">{{ $n }}. {{ $prompt }}</label>
-                    <textarea wire:model="answers.{{ $key }}" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
+                    <label for="refl-{{ $key }}" class="field-label">
+                        {{ $n }}. {{ $prompt }}
+                        @if (in_array($key, ['learned', 'problem_solved', 'plos_addressed'], true))
+                            <span class="text-status-risk">*</span>
+                        @endif
+                    </label>
+                    <textarea id="refl-{{ $key }}" wire:model="answers.{{ $key }}" rows="3" @disabled(! $canEdit) class="textarea"></textarea>
                     @error('answers.'.$key) <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
                 </div>
                 @php $n++; @endphp

@@ -6,8 +6,8 @@
 
         <div class="p-5 grid gap-4 sm:grid-cols-2">
             <div>
-                <label class="field-label">Course</label>
-                <select wire:model="courseId" @disabled(! $canEdit) class="select">
+                <label for="ce-course" class="field-label">Course <span class="text-status-risk">*</span></label>
+                <select id="ce-course" wire:model="courseId" @disabled(! $canEdit) class="select">
                     <option value="">Choose a course</option>
                     @foreach ($courses as $course)
                         <option value="{{ $course->id }}">{{ $course->code }} — {{ $course->title }} (Y{{ $course->year_level }})</option>
@@ -17,40 +17,40 @@
             </div>
 
             <div>
-                <label class="field-label">Course learning outcome</label>
-                <input type="text" wire:model="cloStatement" @disabled(! $canEdit) class="input"
+                <label for="ce-clo" class="field-label">Course learning outcome <span class="text-status-risk">*</span></label>
+                <input id="ce-clo" type="text" wire:model="cloStatement" @disabled(! $canEdit) class="input"
                        placeholder="e.g. Design and simulate a combinational circuit">
                 @error('cloStatement') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label class="field-label">Assessment activity</label>
-                <input type="text" wire:model="activity" @disabled(! $canEdit) class="input"
+                <label for="ce-activity" class="field-label">Assessment activity <span class="text-status-risk">*</span></label>
+                <input id="ce-activity" type="text" wire:model="activity" @disabled(! $canEdit) class="input"
                        placeholder="Lab project, programming project, practical">
                 @error('activity') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label class="field-label">Your output</label>
-                <input type="text" wire:model="output" @disabled(! $canEdit) class="input"
+                <label for="ce-output" class="field-label">Your output <span class="text-status-risk">*</span></label>
+                <input id="ce-output" type="text" wire:model="output" @disabled(! $canEdit) class="input"
                        placeholder="What you produced">
                 @error('output') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div class="flex gap-3">
                 <div class="flex-1">
-                    <label class="field-label">Score</label>
-                    <input type="number" step="0.01" wire:model="score" @disabled(! $canEdit) class="input">
+                    <label for="ce-score" class="field-label">Score</label>
+                    <input id="ce-score" type="number" step="0.01" wire:model="score" @disabled(! $canEdit) class="input">
                 </div>
                 <div class="flex-1">
-                    <label class="field-label">Out of</label>
-                    <input type="number" step="0.01" wire:model="scoreMax" @disabled(! $canEdit) class="input">
+                    <label for="ce-score-max" class="field-label">Out of</label>
+                    <input id="ce-score-max" type="number" step="0.01" wire:model="scoreMax" @disabled(! $canEdit) class="input">
                 </div>
             </div>
 
             <div>
-                <label class="field-label">Level you think this shows</label>
-                <select wire:model="claimedLevel" @disabled(! $canEdit) class="select">
+                <label for="ce-level" class="field-label">Level you think this shows <span class="text-status-risk">*</span></label>
+                <select id="ce-level" wire:model="claimedLevel" @disabled(! $canEdit) class="select">
                     <option value="">Choose a level</option>
                     @foreach (\App\Support\Enums\AttainmentLevel::cases() as $level)
                         <option value="{{ $level->value }}">{{ $level->value }} — {{ $level->label() }}</option>
@@ -60,7 +60,7 @@
             </div>
 
             <div class="sm:col-span-2">
-                <label class="field-label">PLOs this output demonstrates</label>
+                <label class="field-label">PLOs this output demonstrates <span class="text-status-risk">*</span></label>
                 <div class="flex flex-wrap gap-2">
                     @foreach ($plos as $plo)
                         <label class="pill bg-white ring-slate-300 cursor-pointer">

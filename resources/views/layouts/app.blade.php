@@ -21,16 +21,26 @@
     @livewireStyles
 </head>
 <body class="min-h-screen flex flex-col"
-      x-data="{ sidebarOpen: JSON.parse(localStorage.getItem('portfolio-sidebar-open') ?? 'true') }"
+      x-data="{
+          sidebarOpen: JSON.parse(localStorage.getItem('portfolio-sidebar-open') ?? 'true'),
+          mobileNavOpen: false,
+          toggleNav() {
+              if (window.matchMedia('(min-width: 768px)').matches) {
+                  this.sidebarOpen = !this.sidebarOpen;
+              } else {
+                  this.mobileNavOpen = !this.mobileNavOpen;
+              }
+          },
+      }"
       x-init="$watch('sidebarOpen', value => localStorage.setItem('portfolio-sidebar-open', JSON.stringify(value)))">
 
 <header class="bg-navy-800 text-white shrink-0">
     <div class="flex items-center justify-between px-4 h-14">
         <div class="flex items-center gap-3 min-w-0">
             @auth
-                <button type="button" @click="sidebarOpen = !sidebarOpen"
-                        class="hidden md:inline-flex p-1.5 -ml-1.5 rounded hover:bg-white/10 transition shrink-0"
-                        :aria-label="sidebarOpen ? 'Hide navigation' : 'Show navigation'">
+                <button type="button" @click="toggleNav()"
+                        class="inline-flex p-1.5 -ml-1.5 rounded hover:bg-white/10 transition shrink-0"
+                        aria-label="Toggle navigation">
                     <svg class="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
                         <path d="M3 5h14M3 10h14M3 15h14"/>
                     </svg>
@@ -74,8 +84,33 @@
 
 <div class="flex flex-1">
     @auth
+        {{-- Desktop rail: inline column, collapse state remembered per browser. --}}
         <aside x-show="sidebarOpen" x-cloak
                class="w-56 shrink-0 bg-navy-900 text-white/80 hidden md:flex md:flex-col md:justify-between">
+            @include('partials.nav')
+
+            <div class="flex items-center gap-2 px-4 py-4 border-t border-white/10">
+                <img src="{{ asset('images/logo-icpep.png') }}" alt="ICPEP.se logo" class="h-8 w-8 object-contain shrink-0">
+                <span class="text-xs leading-tight text-white/50">
+                    Institute of Computer Engineers of the Philippines,<br>Student Edition
+                </span>
+            </div>
+        </aside>
+
+        {{-- Mobile: off-canvas drawer behind a backdrop, opened from the header's menu button. --}}
+        <div x-show="mobileNavOpen" x-cloak x-transition.opacity
+             @click="mobileNavOpen = false"
+             class="fixed inset-0 top-14 bg-slate-900/50 z-40 md:hidden"></div>
+
+        <aside x-show="mobileNavOpen" x-cloak
+               x-transition:enter="transition ease-out duration-150"
+               x-transition:enter-start="-translate-x-full"
+               x-transition:enter-end="translate-x-0"
+               x-transition:leave="transition ease-in duration-150"
+               x-transition:leave-start="translate-x-0"
+               x-transition:leave-end="-translate-x-full"
+               class="w-72 max-w-[80vw] bg-navy-900 text-white/80 flex flex-col justify-between
+                      fixed left-0 top-14 bottom-0 z-50 shadow-xl md:hidden">
             @include('partials.nav')
 
             <div class="flex items-center gap-2 px-4 py-4 border-t border-white/10">

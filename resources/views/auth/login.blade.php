@@ -16,12 +16,13 @@
             <div>
                 <label for="email" class="field-label">School email</label>
                 <input id="email" name="email" type="email" required autofocus
-                       value="{{ old('email') }}" class="input">
+                       autocomplete="username" value="{{ old('email') }}" class="input">
             </div>
 
             <div>
                 <label for="password" class="field-label">Password</label>
-                <input id="password" name="password" type="password" required class="input">
+                <input id="password" name="password" type="password" required
+                       autocomplete="current-password" class="input">
             </div>
 
             <label class="flex items-center gap-2 text-sm text-slate-600">
