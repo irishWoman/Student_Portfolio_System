@@ -16,6 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
         ]);
+
+        // The app has no 'home' or 'dashboard' route, so the framework's
+        // default guest-middleware redirect falls all the way through to
+        // '/' -- which is itself guest-only, so an authenticated visitor to
+        // '/' or '/login' bounces forever. Send them to their own landing
+        // page instead.
+        $middleware->redirectUsersTo(
+            fn ($request) => $request->user() ? route($request->user()->homeRoute()) : route('login')
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

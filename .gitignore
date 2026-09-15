@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /storage/app/private/evidence
+/storage/app/private/livewire-tmp
 /vendor
 .env
 .env.backup
