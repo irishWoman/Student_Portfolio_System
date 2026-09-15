@@ -2,15 +2,16 @@
 #
 # Nixpacks auto-detects PHP from composer.json and Node from package.json;
 # this file only pins the parts that need to be explicit: which PHP
-# extensions to provision (dompdf needs gd for embedded images, the Word
-# export needs zip), and what runs on every boot.
+# extensions to provision (pdo_mysql to talk to the database at all, gd so
+# dompdf can embed images, zip so PhpWord can write .docx), and what runs
+# on every boot.
 #
 # Migrations and storage:link run on every start rather than as a separate
 # release step, because Railway's free/hobby plans don't offer one and
 # Laravel's migrate is safe to re-run (it skips what's already applied).
 
 [phases.setup]
-nixPkgs = ["php82", "php82Extensions.gd", "php82Extensions.zip", "php82Packages.composer"]
+nixPkgs = ["php82", "php82Extensions.pdo_mysql", "php82Extensions.gd", "php82Extensions.zip", "php82Packages.composer"]
 
 [phases.build]
 cmds = [
