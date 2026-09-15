@@ -17,7 +17,8 @@ return [
     // Branding surfaced in the header and stamped onto exported portfolios.
     'institution' => [
         'name' => env('INSTITUTION_NAME', 'University of Saint Louis Tuguegarao'),
-        'unit' => env('INSTITUTION_UNIT', 'School of Engineering, Architecture and Information Technology Education'),
+        'unit' => env('INSTITUTION_UNIT', 'School of Architecture, Computing and Engineering'),
+        'department' => env('INSTITUTION_DEPARTMENT', 'Computer Engineering Department'),
         'program' => env('INSTITUTION_PROGRAM', 'BS Computer Engineering'),
     ],
 ];

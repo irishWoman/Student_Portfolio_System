@@ -14,6 +14,11 @@
         @error('answers') <p class="text-sm text-status-risk">{{ $message }}</p> @enderror
 
         @foreach ($this->fields() as $field)
+            @if (($field['type'] ?? 'text') === 'heading')
+                <p class="band">{{ $field['label'] }}</p>
+                @continue
+            @endif
+
             <div>
                 <label class="field-label" for="field-{{ $field['name'] }}">
                     {{ $field['label'] }}
@@ -28,6 +33,21 @@
                               rows="{{ $field['rows'] ?? 3 }}"
                               @disabled(! $canEdit)
                               class="textarea"></textarea>
+                @elseif (($field['type'] ?? 'text') === 'select')
+                    <select id="field-{{ $field['name'] }}"
+                            wire:model.live="answers.{{ $field['name'] }}"
+                            @disabled(! $canEdit)
+                            class="select">
+                        <option value="">Choose one</option>
+                        @foreach ($field['options'] ?? [] as $option)
+                            <option value="{{ $option }}">{{ $option }}</option>
+                        @endforeach
+                    </select>
+                @elseif (($field['type'] ?? 'text') === 'date')
+                    <input id="field-{{ $field['name'] }}" type="date"
+                           wire:model.live.debounce.800ms="answers.{{ $field['name'] }}"
+                           @disabled(! $canEdit)
+                           class="input">
                 @else
                     <input id="field-{{ $field['name'] }}" type="text"
                            wire:model.live.debounce.800ms="answers.{{ $field['name'] }}"

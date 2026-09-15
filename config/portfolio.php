@@ -102,11 +102,47 @@ return [
             'years' => [1, 2, 3, 4],
             'checkpoint' => 'year',
             'fields' => [
+                // --- Contact & enrollment, as the printed form's top block ---------
+                ['name' => 'address', 'label' => 'Address', 'type' => 'text', 'required' => true],
+                ['name' => 'email_address', 'label' => 'E-mail address', 'type' => 'text', 'required' => true,
+                 'help' => 'This can be the same address you sign in with.'],
+                ['name' => 'contact_number', 'label' => 'Contact number/s', 'type' => 'text', 'required' => true],
+                ['name' => 'term_year_started', 'label' => 'Term/Year started', 'type' => 'text', 'required' => true,
+                 'help' => 'For example: 1st Semester, AY 2023-2024.'],
+
+                // --- Personal data ---------------------------------------------------
+                ['name' => 'personal_data_heading', 'label' => 'Personal data', 'type' => 'heading'],
+                ['name' => 'gender', 'label' => 'Gender', 'type' => 'select', 'required' => true,
+                 'options' => ['Male', 'Female']],
+                ['name' => 'date_of_birth', 'label' => 'Date of birth', 'type' => 'date', 'required' => true],
+                ['name' => 'birth_place', 'label' => 'Birth place', 'type' => 'text', 'required' => true],
+                ['name' => 'religion', 'label' => 'Religion', 'type' => 'text', 'required' => false],
+                ['name' => 'civil_status', 'label' => 'Civil status', 'type' => 'select', 'required' => true,
+                 'options' => ['Single', 'Married', 'Widowed', 'Separated']],
+                ['name' => 'citizenship', 'label' => 'Citizenship', 'type' => 'text', 'required' => true],
+                ['name' => 'parents', 'label' => 'Parents/Guardian', 'type' => 'textarea', 'rows' => 2, 'required' => true],
+
+                // --- Educational background -------------------------------------------
+                ['name' => 'educational_background_heading', 'label' => 'Educational background', 'type' => 'heading'],
+                ['name' => 'kinder_school', 'label' => 'Kinder 1-2', 'type' => 'text', 'required' => false],
+                ['name' => 'elementary_school', 'label' => 'Grade 1-6', 'type' => 'text', 'required' => true],
+                ['name' => 'junior_high_school', 'label' => 'Grade 7-10', 'type' => 'text', 'required' => true],
+                ['name' => 'senior_high_school', 'label' => 'Grade 11-12', 'type' => 'text', 'required' => false],
+                ['name' => 'tertiary_school', 'label' => 'Tertiary', 'type' => 'text', 'required' => false,
+                 'help' => 'Write the program/school before taking up BSCpE at USLT, if any.'],
+
+                // --- Where this year is heading ---------------------------------------
+                ['name' => 'goals_heading', 'label' => 'Where you are heading', 'type' => 'heading'],
                 ['name' => 'career_goals', 'label' => 'Career goals', 'type' => 'textarea', 'rows' => 3, 'required' => true,
                  'help' => 'What kind of engineer do you want to be, and where?'],
                 ['name' => 'specializations', 'label' => 'Areas of specialization', 'type' => 'text', 'required' => true,
                  'help' => 'For example: embedded systems, IoT, digital systems.'],
                 ['name' => 'professional_interests', 'label' => 'Professional interests', 'type' => 'textarea', 'rows' => 2, 'required' => false],
+
+                // --- Personal reflection -----------------------------------------------
+                ['name' => 'personal_reflection_heading', 'label' => 'Personal reflection', 'type' => 'heading'],
+                ['name' => 'personal_reflection', 'label' => 'Your reflection', 'type' => 'textarea', 'rows' => 5, 'required' => true,
+                 'help' => 'Write a personal reflection on your journey as a Computer Engineering student — your motivations, challenges, growth, and goals.'],
             ],
         ],
 

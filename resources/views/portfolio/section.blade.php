@@ -34,6 +34,11 @@
         </div>
     </div>
 
+    {{-- Section 1 carries the 2x2 ID photo alongside its own answers. --}}
+    @if ($number === 1)
+        @livewire('portfolio.profile-photo', ['portfolio' => $portfolio, 'canEdit' => $canEdit])
+    @endif
+
     {{--
         Sections are rendered either by the generic field-driven form or by the
         dedicated component named in config/portfolio.php. Adding a section is a

@@ -36,27 +36,105 @@
         .prompt { font-weight: bold; margin: 6px 0 2px; }
         .answer { font-style: italic; margin: 0 0 4px; }
         .pagebreak { page-break-after: always; }
+
+        /* -------------------------------------------------- Cover letterhead */
+        .letterhead { text-align: center; margin-bottom: 10px; }
+        .letterhead img { height: 58px; margin-bottom: 4px; }
+        .letterhead .uni { font-size: 16px; font-weight: bold; color: #14375E; margin: 0; }
+        .letterhead .school { font-size: 9.5px; font-weight: bold; margin: 6px 0 0; }
+        .letterhead .dept { font-size: 9.5px; font-weight: bold; margin: 0; }
+        .letterhead .degree { font-size: 9px; margin: 8px 0 0; }
+        .letterhead .doctitle { font-size: 11px; font-weight: bold; margin: 0; }
+
+        /* Borderless label/value pairs, as the printed form's blank-line rows.
+           !important beats the generic tbody zebra-striping rule above, which
+           would otherwise win on specificity and bleed into these. */
+        .plain { border: none; }
+        .plain td { border: none !important; background: none !important; padding: 2px 4px; }
+        .plabel { font-weight: bold; width: 38%; }
+
+        .photo-box {
+            width: 120px; height: 120px; border: 1px solid #9CA3AF;
+            text-align: center; vertical-align: middle; font-size: 8px; color: #6B7280;
+        }
+        .photo-box img { width: 118px; height: 118px; }
+
+        /* The orange section band from the printed form. */
+        .form-band {
+            background: #FDF3DC; color: #14375E; font-weight: bold; text-transform: uppercase;
+            font-size: 9px; padding: 4px 6px; border: 1px solid #F0A500; margin: 10px 0 2px;
+        }
     </style>
 </head>
 <body>
 
+@php
+    $profile = $portfolio->entryFor(1);
+    $dob = $profile?->answer('date_of_birth');
+    $dobFormatted = $dob ? \Illuminate\Support\Carbon::parse($dob)->format('F j, Y') : null;
+@endphp
+
 {{-- ---------------------------------------------------------------- Cover --}}
-<div class="cover">
-    <p class="inst">{{ config('app.institution.name') }}</p>
-    <p class="unit">{{ config('app.institution.unit') }}</p>
-    <p class="title">COMPUTER ENGINEERING STUDENT DEVELOPMENT PORTFOLIO</p>
-    <p class="sub">Program Learning Outcome and Competency Attainment Record</p>
+<div class="letterhead">
+    <img src="{{ public_path('images/logo-uslt.png') }}" alt="">
+    <p class="uni">{{ strtoupper(config('app.institution.name')) }}</p>
+    <p class="school">{{ strtoupper(config('app.institution.unit')) }}</p>
+    <p class="dept">{{ strtoupper(config('app.institution.department')) }}</p>
+    <p class="degree">{{ strtoupper($portfolio->student->program->title) }}</p>
+    <p class="doctitle">STUDENT PORTFOLIO</p>
 </div>
 
-<table>
-    <tbody>
-        <tr><td class="label">Student Name</td><td>{{ $portfolio->student->fullName() }}</td></tr>
-        <tr><td class="label">Student Number</td><td>{{ $portfolio->student->student_number }}</td></tr>
-        <tr><td class="label">Program</td><td>{{ $portfolio->student->program->title }}</td></tr>
-        <tr><td class="label">Year Level</td><td>{{ $portfolio->year_level }}{{ $ordinal }} Year</td></tr>
-        <tr><td class="label">Academic Year</td><td>{{ $portfolio->academicYear->label }}</td></tr>
-        <tr><td class="label">Portfolio Status</td><td>{{ $statusLine }}</td></tr>
-    </tbody>
+<table class="plain">
+    <tr>
+        <td style="width:68%; vertical-align:top; border:none;">
+            <table class="plain">
+                <tr><td class="plabel">Name:</td><td>{{ $portfolio->student->fullName() }}</td></tr>
+                <tr><td class="plabel">Address:</td><td>{{ $profile?->answer('address') ?: '—' }}</td></tr>
+                <tr><td class="plabel">E-mail Address:</td><td>{{ $profile?->answer('email_address') ?: '—' }}</td></tr>
+                <tr><td class="plabel">Contact Number/s:</td><td>{{ $profile?->answer('contact_number') ?: '—' }}</td></tr>
+                <tr><td class="plabel">Term/Year Started:</td><td>{{ $profile?->answer('term_year_started') ?: '—' }}</td></tr>
+                <tr><td class="plabel">Year Level:</td><td>{{ $portfolio->year_level }}{{ $ordinal }} Year</td></tr>
+            </table>
+        </td>
+        <td style="width:32%; text-align:center; vertical-align:top; border:none;">
+            <div class="photo-box">
+                @if ($portfolio->student->photo_path)
+                    <img src="{{ $portfolio->student->photoAbsolutePath() }}" alt="">
+                @else
+                    2x2 ID Photo
+                @endif
+            </div>
+        </td>
+    </tr>
+</table>
+
+<p class="form-band">Personal Data</p>
+<table class="plain">
+    <tr><td class="plabel">Gender:</td><td>{{ $profile?->answer('gender') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Date of Birth:</td><td>{{ $dobFormatted ?: '—' }}</td></tr>
+    <tr><td class="plabel">Birth Place:</td><td>{{ $profile?->answer('birth_place') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Religion:</td><td>{{ $profile?->answer('religion') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Civil Status:</td><td>{{ $profile?->answer('civil_status') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Citizenship:</td><td>{{ $profile?->answer('citizenship') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Parents:</td><td>{{ $profile?->answer('parents') ?: '—' }}</td></tr>
+</table>
+
+<p class="form-band">Educational Background</p>
+<table class="plain">
+    <tr><td class="plabel">Kinder 1-2:</td><td>{{ $profile?->answer('kinder_school') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Grade 1-6:</td><td>{{ $profile?->answer('elementary_school') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Grade 7-10:</td><td>{{ $profile?->answer('junior_high_school') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Grade 11-12:</td><td>{{ $profile?->answer('senior_high_school') ?: '—' }}</td></tr>
+    <tr><td class="plabel">Tertiary:</td><td>{{ $profile?->answer('tertiary_school') ?: '—' }}</td></tr>
+</table>
+<p class="note" style="margin-top: -4px;">(write program/school before taking up BSCpE at USLT)</p>
+
+<p class="form-band">Personal Reflection</p>
+<p style="margin: 4px 0 8px;">{{ $profile?->answer('personal_reflection') ?: '—' }}</p>
+
+<table class="plain" style="margin-top: 8px;">
+    <tr><td class="plabel">Academic Year:</td><td>{{ $portfolio->academicYear->label }}</td></tr>
+    <tr><td class="plabel">Portfolio Status:</td><td>{{ $statusLine }}</td></tr>
 </table>
 
 <p class="note">
@@ -67,7 +145,6 @@
 <div class="pagebreak"></div>
 
 {{-- ------------------------------------------------------------ Section 1 --}}
-@php $profile = $portfolio->entryFor(1); @endphp
 <h1>Section 1 — Student Profile</h1>
 <table>
     <thead><tr><th style="width:30%">Field</th><th>Entry</th></tr></thead>
@@ -78,6 +155,7 @@
         <tr><td class="label">Year Level</td><td>{{ $portfolio->year_level }}{{ $ordinal }} Year</td></tr>
         <tr><td class="label">Academic Year</td><td>{{ $portfolio->academicYear->label }}</td></tr>
         @foreach ($profile?->definition()['fields'] ?? [] as $field)
+            @continue(($field['type'] ?? 'text') === 'heading')
             <tr><td class="label">{{ $field['label'] }}</td><td>{{ $profile->answer($field['name']) ?: '—' }}</td></tr>
         @endforeach
     </tbody>

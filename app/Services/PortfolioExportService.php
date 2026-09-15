@@ -69,6 +69,13 @@ class PortfolioExportService
             'alignment' => Jc::CENTER,
         ]);
 
+        // Borderless: the cover page's label/value rows read as blank lines on
+        // a form, not as a data table.
+        $word->addTableStyle('plain', [
+            'borderSize' => 0,
+            'cellMargin' => 40,
+        ]);
+
         $section = $word->addSection([
             'marginTop' => 1000, 'marginBottom' => 1000,
             'marginLeft' => 1000, 'marginRight' => 1000,
@@ -102,27 +109,82 @@ class PortfolioExportService
     protected function addCover(Section $section, Portfolio $portfolio): void
     {
         $student = $portfolio->student;
+        $profile = $portfolio->entryFor(1);
+        $dob = $profile?->answer('date_of_birth');
 
-        $section->addText(config('app.institution.name'), ['bold' => true, 'size' => 12], ['alignment' => Jc::CENTER]);
-        $section->addText(config('app.institution.unit'), ['size' => 9], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
-
-        $section->addText('COMPUTER ENGINEERING STUDENT DEVELOPMENT PORTFOLIO',
-            ['bold' => true, 'size' => 15, 'color' => '14375E'], ['alignment' => Jc::CENTER]);
-        $section->addText('Program Learning Outcome and Competency Attainment Record',
-            ['italic' => true, 'size' => 10], ['alignment' => Jc::CENTER, 'spaceAfter' => 280]);
-
-        $table = $section->addTable('grid');
-
-        foreach ([
-            'Student Name' => $student->fullName(),
-            'Student Number' => $student->student_number,
-            'Program' => $student->program->title,
-            'Year Level' => $portfolio->year_level.$this->ordinal($portfolio->year_level).' Year ('.$this->stageName($portfolio->year_level).' Level)',
-            'Academic Year' => $portfolio->academicYear->label,
-            'Portfolio Status' => $this->statusLine($portfolio),
-        ] as $label => $value) {
-            $this->labelRow($table, $label, (string) $value);
+        // --- Letterhead --------------------------------------------------------
+        $logo = public_path('images/logo-uslt.png');
+        if (is_file($logo)) {
+            $section->addImage($logo, ['width' => 60, 'height' => 60, 'alignment' => Jc::CENTER]);
         }
+        $section->addText(strtoupper(config('app.institution.name')), ['bold' => true, 'size' => 14, 'color' => '14375E'], ['alignment' => Jc::CENTER]);
+        $section->addText(strtoupper(config('app.institution.unit')), ['bold' => true, 'size' => 9], ['alignment' => Jc::CENTER, 'spaceBefore' => 120]);
+        $section->addText(strtoupper(config('app.institution.department')), ['bold' => true, 'size' => 9], ['alignment' => Jc::CENTER]);
+        $section->addText(strtoupper($student->program->title), ['size' => 9], ['alignment' => Jc::CENTER, 'spaceBefore' => 120]);
+        $section->addText('STUDENT PORTFOLIO', ['bold' => true, 'size' => 11], ['alignment' => Jc::CENTER, 'spaceAfter' => 200]);
+
+        // --- Identification block: form fields beside the 2x2 photo -----------
+        $idTable = $section->addTable('plain');
+        $idTable->addRow();
+
+        $infoCell = $idTable->addCell(6800);
+        $infoTable = $infoCell->addTable('plain');
+        foreach ([
+            'Name' => $student->fullName(),
+            'Address' => $profile?->answer('address') ?: '—',
+            'E-mail Address' => $profile?->answer('email_address') ?: '—',
+            'Contact Number/s' => $profile?->answer('contact_number') ?: '—',
+            'Term/Year Started' => $profile?->answer('term_year_started') ?: '—',
+            'Year Level' => $portfolio->year_level.$this->ordinal($portfolio->year_level).' Year ('.$this->stageName($portfolio->year_level).' Level)',
+        ] as $label => $value) {
+            $this->labelRow($infoTable, $label, (string) $value);
+        }
+
+        $photoCell = $idTable->addCell(2600, ['vAlign' => 'center']);
+        $photoPath = $student->photoAbsolutePath();
+        if ($photoPath && is_file($photoPath)) {
+            $photoCell->addImage($photoPath, ['width' => 105, 'height' => 105, 'alignment' => Jc::CENTER]);
+        } else {
+            $photoCell->addText('2x2 ID Photo', ['size' => 8, 'color' => '6B7280'], ['alignment' => Jc::CENTER]);
+        }
+
+        // --- Personal data -------------------------------------------------------
+        $this->bandRow($section, 'Personal Data');
+        $personalTable = $section->addTable('plain');
+        foreach ([
+            'Gender' => $profile?->answer('gender') ?: '—',
+            'Date of Birth' => $dob ? \Illuminate\Support\Carbon::parse($dob)->format('F j, Y') : '—',
+            'Birth Place' => $profile?->answer('birth_place') ?: '—',
+            'Religion' => $profile?->answer('religion') ?: '—',
+            'Civil Status' => $profile?->answer('civil_status') ?: '—',
+            'Citizenship' => $profile?->answer('citizenship') ?: '—',
+            'Parents' => $profile?->answer('parents') ?: '—',
+        ] as $label => $value) {
+            $this->labelRow($personalTable, $label, (string) $value);
+        }
+
+        // --- Educational background -----------------------------------------------
+        $this->bandRow($section, 'Educational Background');
+        $eduTable = $section->addTable('plain');
+        foreach ([
+            'Kinder 1-2' => $profile?->answer('kinder_school') ?: '—',
+            'Grade 1-6' => $profile?->answer('elementary_school') ?: '—',
+            'Grade 7-10' => $profile?->answer('junior_high_school') ?: '—',
+            'Grade 11-12' => $profile?->answer('senior_high_school') ?: '—',
+            'Tertiary' => $profile?->answer('tertiary_school') ?: '—',
+        ] as $label => $value) {
+            $this->labelRow($eduTable, $label, (string) $value);
+        }
+        $section->addText('(write program/school before taking up BSCpE at USLT)', $this->noteText);
+
+        // --- Personal reflection --------------------------------------------------
+        $this->bandRow($section, 'Personal Reflection');
+        $section->addText($profile?->answer('personal_reflection') ?: '—', $this->bodyText, ['spaceAfter' => 160]);
+
+        // --- Record keeping --------------------------------------------------------
+        $recordTable = $section->addTable('plain');
+        $this->labelRow($recordTable, 'Academic Year', $portfolio->academicYear->label);
+        $this->labelRow($recordTable, 'Portfolio Status', $this->statusLine($portfolio));
 
         $section->addTextBreak(1);
         $section->addText(
@@ -132,6 +194,15 @@ class PortfolioExportService
         );
 
         $section->addPageBreak();
+    }
+
+    /** The printed form's orange section band, e.g. "Personal Data". */
+    protected function bandRow(Section $section, string $label): void
+    {
+        $table = $section->addTable(['borderSize' => 6, 'borderColor' => 'F0A500', 'cellMargin' => 60]);
+        $table->addRow();
+        $table->addCell(9400, ['bgColor' => 'FDF3DC'])
+            ->addText(strtoupper($label), ['bold' => true, 'size' => 9, 'color' => '14375E']);
     }
 
     // -------------------------------------------------------------------------
@@ -157,6 +228,10 @@ class PortfolioExportService
         $this->labelRow($table, 'Academic Year', $portfolio->academicYear->label);
 
         foreach ($entry?->definition()['fields'] ?? [] as $field) {
+            if (($field['type'] ?? 'text') === 'heading') {
+                continue;
+            }
+
             $this->labelRow($table, $field['label'], (string) ($entry->answer($field['name']) ?: '—'));
         }
     }

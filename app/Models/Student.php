@@ -50,6 +50,18 @@ class Student extends Model
         return strtoupper($this->last_name).', '.$this->first_name.$middle;
     }
 
+    /** Public URL for the 2x2 ID photo, or null if none has been uploaded. */
+    public function photoUrl(): ?string
+    {
+        return $this->photo_path ? asset('storage/'.$this->photo_path) : null;
+    }
+
+    /** Absolute filesystem path to the photo, for embedding in exports. */
+    public function photoAbsolutePath(): ?string
+    {
+        return $this->photo_path ? storage_path('app/public/'.$this->photo_path) : null;
+    }
+
     public function portfolioFor(AcademicYear $year): ?Portfolio
     {
         return $this->portfolios()->where('academic_year_id', $year->id)->first();
