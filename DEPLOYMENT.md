@@ -13,8 +13,10 @@ after that, `git push` is the whole workflow.
 2. **New Project → Deploy from GitHub repo** → pick `Student_Portfolio_System`.
 3. Railway will try to build immediately and fail — that's expected, there's
    no database or environment variables yet. Keep going.
-4. Open the new service's **Settings → Root Directory** and set it to
-   `beta/cpe-plo-portfolio` (the Laravel app isn't at the repo root).
+4. Leave **Settings → Root Directory** blank. The Laravel app is the repo
+   root on GitHub (`composer.json`, `artisan`, `app/` all sit directly in
+   `Student_Portfolio_System`) — `beta/cpe-plo-portfolio` was only ever a
+   local folder name on disk, never part of the git repo itself.
 
 ## 2. Add the database
 
