@@ -6,6 +6,10 @@
     (collapsible, remembered per browser), and the working area on a light
     background. Familiarity is the point; nobody should need training to find
     their portfolio.
+
+    Header, sidebar and footer are chrome, not content: the shell is pinned to
+    the viewport height and only <main> scrolls internally, so none of them
+    move while a student works through a long section.
 --}}
 <!DOCTYPE html>
 <html lang="en">
@@ -20,10 +24,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="min-h-screen flex flex-col"
+<body class="h-screen flex flex-col overflow-hidden"
       x-data="{
           sidebarOpen: JSON.parse(localStorage.getItem('portfolio-sidebar-open') ?? 'true'),
           mobileNavOpen: false,
+          mainScrolled: false,
           toggleNav() {
               if (window.matchMedia('(min-width: 768px)').matches) {
                   this.sidebarOpen = !this.sidebarOpen;
@@ -82,11 +87,11 @@
     <div class="h-1 bg-amber-500"></div>
 </header>
 
-<div class="flex flex-1">
+<div class="flex flex-1 min-h-0">
     @auth
         {{-- Desktop rail: inline column, collapse state remembered per browser. --}}
         <aside x-show="sidebarOpen" x-cloak
-               class="w-56 shrink-0 bg-navy-900 text-white/80 hidden md:flex md:flex-col md:justify-between">
+               class="w-56 shrink-0 bg-navy-900 text-white/80 hidden md:flex md:flex-col md:justify-between overflow-y-auto">
             @include('partials.nav')
 
             <div class="flex items-center gap-2 px-4 py-4 border-t border-white/10">
@@ -122,15 +127,29 @@
         </aside>
     @endauth
 
-    <main class="flex-1 min-w-0 p-4 sm:p-6 max-w-[1400px] mx-auto">
-        @include('partials.flash')
-        @yield('content')
+    <main x-ref="mainScroll" @scroll.passive="mainScrolled = $refs.mainScroll.scrollTop > 400"
+          class="flex-1 min-w-0 overflow-y-auto">
+        <div class="p-4 sm:p-6 max-w-[1400px] mx-auto">
+            @include('partials.flash')
+            @yield('content')
+        </div>
     </main>
 </div>
 
 <footer class="shrink-0 border-t border-slate-200 bg-white px-4 py-3 text-center text-xs text-slate-500">
     &copy; {{ now()->year }} {{ config('app.institution.name') }} &middot; Made by ICPEP.se
 </footer>
+
+{{-- Back to top: only ever relevant once the content pane has scrolled. --}}
+<button type="button" x-show="mainScrolled" x-cloak x-transition.opacity
+        @click="$refs.mainScroll.scrollTo({ top: 0, behavior: 'smooth' })"
+        title="Back to top" aria-label="Back to top"
+        class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-navy-800 text-white shadow-lg hover:bg-navy-700 transition">
+    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 15V5"/>
+        <path d="M5 9l5-5 5 5"/>
+    </svg>
+</button>
 
 @livewireScripts
 </body>
