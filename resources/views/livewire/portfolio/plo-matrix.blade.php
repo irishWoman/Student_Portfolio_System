@@ -6,13 +6,13 @@
 <div class="card">
     <div class="card-header">PLO claims for year {{ $portfolio->year_level }}</div>
 
-    <div class="px-5 py-3 bg-cream-100 text-sm text-slate-700 border-b border-cream-200">
+    <div class="px-4 sm:px-5 py-3 bg-cream-100 text-sm text-slate-700 border-b border-cream-200">
         Expected level at the end of year {{ $portfolio->year_level }}:
         <span class="font-semibold">{{ $expected->label() }}</span>.
         Your claim is indirect evidence; only your evaluator's validation counts toward attainment.
     </div>
 
-    <table class="data-table">
+    <table class="data-table stack-table">
         <thead>
             <tr>
                 <th class="w-16">PLO</th>
@@ -26,11 +26,11 @@
             @foreach ($plos as $plo)
                 <tr>
                     <td class="font-semibold text-navy-800">{{ $plo->code() }}</td>
-                    <td>
+                    <td data-label="Outcome">
                         <p class="font-medium">{{ $plo->title }}</p>
                         <p class="text-xs text-slate-500">{{ $plo->statement }}</p>
                     </td>
-                    <td>
+                    <td data-label="Your claim">
                         <select wire:model="claims.{{ $plo->id }}" @disabled(! $canEdit) class="select">
                             <option value="">Not claimed</option>
                             @foreach ($levels as $level)
@@ -38,11 +38,11 @@
                             @endforeach
                         </select>
                     </td>
-                    <td>
+                    <td data-label="Evidence behind the claim">
                         <input type="text" wire:model="notes.{{ $plo->id }}" @disabled(! $canEdit)
                                class="input" placeholder="Which output shows this?">
                     </td>
-                    <td class="text-center">
+                    <td data-label="Validated" class="md:text-center">
                         @if (isset($validated[$plo->id]))
                             <span class="pill bg-emerald-50 text-status-ontrack ring-emerald-200">{{ number_format($validated[$plo->id], 2) }}</span>
                         @else

@@ -24,7 +24,13 @@
                             <a href="{{ route('evidence.download', $file) }}" class="text-navy-700 underline underline-offset-2">{{ $file->original_name }}</a>
                             <span class="text-slate-400 block">{{ $file->humanSize() }}</span>
                         </td>
-                        <td class="text-xs">{{ $file->plos->map(fn ($p) => $p->number)->implode(', ') ?: '—' }}</td>
+                        <td class="text-xs">
+                            @forelse ($file->plos as $p)
+                                <p><span class="font-semibold text-navy-800">{{ $p->code() }}</span> · {{ $p->title }}</p>
+                            @empty
+                                —
+                            @endforelse
+                        </td>
                         <td>
                             @if ($file->quality())
                                 <span class="pill {{ $file->countsTowardAttainment() ? 'bg-emerald-50 text-status-ontrack ring-emerald-200' : 'bg-slate-100 text-slate-600 ring-slate-300' }}">
@@ -63,14 +69,7 @@
             </div>
             <div class="sm:col-span-2">
                 <label class="field-label">Which PLOs does it demonstrate?</label>
-                <div class="flex flex-wrap gap-2">
-                    @foreach (\App\Models\Plo::orderBy('number')->get() as $plo)
-                        <label class="pill bg-white ring-slate-300 cursor-pointer">
-                            <input type="checkbox" name="plos[]" value="{{ $plo->id }}" class="mr-1 border-slate-300 text-navy-800 focus:ring-navy-600">
-                            {{ $plo->code() }}
-                        </label>
-                    @endforeach
-                </div>
+                @include('partials.plo-picker', ['plos' => \App\Models\Plo::orderBy('number')->get(), 'name' => 'plos[]'])
             </div>
             <div class="sm:col-span-2">
                 <button class="btn-primary">Upload evidence</button>

@@ -63,6 +63,45 @@
         @apply bg-cream-50;
     }
 
+    /* Phones: wide tables scroll inside themselves instead of stretching the
+       page. Tables that hold inputs (like the PLO matrix) opt into
+       .stack-table below, where each row becomes a card. */
+    @media (max-width: 767px) {
+        .data-table {
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .data-table.stack-table {
+            overflow-x: visible;
+        }
+
+        .stack-table thead {
+            display: none;
+        }
+
+        .stack-table tbody,
+        .stack-table tr,
+        .stack-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .stack-table tbody tr {
+            @apply border-b-4 border-slate-100 py-1;
+        }
+
+        .stack-table tbody td {
+            @apply border-b-0 px-4 py-1.5;
+        }
+
+        .stack-table td[data-label]::before {
+            content: attr(data-label);
+            @apply block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1;
+        }
+    }
+
     .btn {
         @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition
                focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 disabled:opacity-50;

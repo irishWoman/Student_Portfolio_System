@@ -61,15 +61,7 @@
 
             <div class="sm:col-span-2">
                 <label class="field-label">PLOs this output demonstrates <span class="text-status-risk">*</span></label>
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($plos as $plo)
-                        <label class="pill bg-white ring-slate-300 cursor-pointer">
-                            <input type="checkbox" wire:model="selectedPlos" value="{{ $plo->id }}"
-                                   @disabled(! $canEdit) class="mr-1 border-slate-300 text-navy-800 focus:ring-navy-600">
-                            {{ $plo->code() }}
-                        </label>
-                    @endforeach
-                </div>
+                @include('partials.plo-picker', ['plos' => $plos, 'wireModel' => 'selectedPlos', 'disabled' => ! $canEdit])
                 @error('selectedPlos') <p class="text-sm text-status-risk mt-1">{{ $message }}</p> @enderror
             </div>
 
